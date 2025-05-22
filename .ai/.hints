@@ -1,0 +1,8 @@
+This is a browser plugin repository.
+
+The browser plugin uses:
+
+* Javascript
+* Vite
+* React
+* @mui

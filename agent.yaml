@@ -1,0 +1,7 @@
+extensions:
+  developer:
+    enabled: true
+    name: developer
+    type: builtin
+GOOSE_MODEL: gemini-2.5-flash-preview-04-17
+GOOSE_PROVIDER: google

@@ -1,0 +1,7 @@
+extensions:
+  developer:
+    enabled: true
+    name: developer
+    type: builtin
+GOOSE_MODEL: claude-3-7-sonnet-20250219
+GOOSE_PROVIDER: anthropic
