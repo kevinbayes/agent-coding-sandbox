@@ -47,28 +47,25 @@ RUN mkdir -p /root/.config/xfce4/xfconf/xfce-perchannel-xml && \
   <property name="enabled" type="bool" value="false"/>\n\
 </channel>' > /root/.config/xfce4/xfconf/xfce-perchannel-xml/xfce4-screensaver.xml
 
-# Download and install Google Chrome
-RUN curl -Lo google-chrome-stable_current_amd64.deb https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb && \
-    apt-get install -y ./google-chrome-stable_current_amd64.deb && \
-    rm google-chrome-stable_current_amd64.deb
-
 # Configure supervisord
 RUN mkdir -p /root/.config/goose
 RUN curl -fsSL https://github.com/block/goose/releases/download/stable/download_cli.sh | CONFIGURE=false bash
-RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh | bash
-
+# Install Node.js 20 and npm
+RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - && \
+    apt-get install -y nodejs
 
 RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y && \
     apt-get install -y python3-pip python3.12-dev ripgrep
 
 RUN curl -LsSf https://astral.sh/uv/install.sh | sh && \
     mv $HOME/.local/bin/uv /usr/local/bin/uv
-
-RUN \. "$HOME/.nvm/nvm.sh" && nvm install 22
+RUN npm install -g @anthropic-ai/claude-code
+RUN npm install -g @google/gemini-cli
 
 COPY agent.yaml /root/.config/goose/config.yaml
 COPY .hints /root/.config/goose/.goosehints
-COPY bashrc /root/.bashrc
+COPY bashrc /root/.bashrc-ext
+RUN cat /root/.bashrc-ext >> /root/.bashrc
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
 # Expose ports for noVNC and SSH
